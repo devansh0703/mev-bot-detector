@@ -1,0 +1,21 @@
+[package]
+name = "mev-engine"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+ethereum-types = "0.14"
+console_error_panic_hook = "0.1.7"
+
+# This is the FIX: Add getrandom with the "js" feature enabled.
+getrandom = { version = "0.2", features = ["js"] }
+
+[profile.release]
+lto = true
+opt-level = "s"

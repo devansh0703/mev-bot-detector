@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  kafka:
+    image: obsidiandynamics/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092" # Kafka broker
+      - "2181:2181" # Zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
