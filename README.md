@@ -110,7 +110,7 @@ In the project's root directory, start the Kafka and Redis containers using Dock
 
 ```bash
 # From the root mev-bot-detector/ directory
-docker-compose up -d
+docker compose up -d
 ```
 
 ## 🏃 Running the Application
