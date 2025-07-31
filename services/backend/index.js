@@ -56,9 +56,29 @@ async function main() {
     }, config.batchIntervalMs);
 
     // 4. Set up provider event listeners
+    // Helper: delay for ms
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // Helper: fetch tx with retry
+    async function fetchTxWithRetry(txHash, retries = 3, delayMs = 200) {
+        for (let i = 0; i < retries; i++) {
+            try {
+                const tx = await provider.getTransaction(txHash);
+                if (tx) return tx;
+            } catch (error) {
+                // Only retry for internal error
+                if (error.code !== -32000 && error.code !== 'UNKNOWN_ERROR') throw error;
+            }
+            await sleep(delayMs);
+        }
+        return null;
+    }
+
     provider.on('pending', async (txHash) => {
         try {
-            const tx = await provider.getTransaction(txHash);
+            const tx = await fetchTxWithRetry(txHash, 3, 200);
             if (tx && tx.to) {
                 txPool.push({
                     hash: tx.hash,
